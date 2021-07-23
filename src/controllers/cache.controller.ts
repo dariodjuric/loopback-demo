@@ -22,7 +22,7 @@ export class CacheController {
       },
     },
   })
-  async create(
+  async createCacheEntry(
     @requestBody({
       content: {
         'application/json': {
