@@ -2,10 +2,26 @@ import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
 
 const config = {
-  name: 'GitHub',
+  name: 'GitHubApi',
   connector: 'rest',
   baseURL: 'https://api.github.com/',
-  crud: false
+  options: {
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+    },
+  },
+  operations: [
+    {
+      template: {
+        method: 'GET',
+        url: 'repos/{repositoryOwner}/{repositoryName}/issues/{issueNumber}',
+      },
+      functions: {
+        getIssue: ['repositoryOwner', 'repositoryName', 'issueNumber'],
+      },
+    },
+  ],
 };
 
 // Observe application's life cycle to disconnect the datasource when
@@ -13,13 +29,12 @@ const config = {
 // gracefully. The `stop()` method is inherited from `juggler.DataSource`.
 // Learn more at https://loopback.io/doc/en/lb4/Life-cycle.html
 @lifeCycleObserver('datasource')
-export class GitHubDataSource extends juggler.DataSource
-  implements LifeCycleObserver {
-  static dataSourceName = 'GitHub';
-  static readonly defaultConfig = config;
-
+export class GitHubApiDataSource
+  extends juggler.DataSource
+  implements LifeCycleObserver
+{
   constructor(
-    @inject('datasources.config.GitHub', {optional: true})
+    @inject('datasources.config.GitHubApi', {optional: true})
     dsConfig: object = config,
   ) {
     super(dsConfig);
