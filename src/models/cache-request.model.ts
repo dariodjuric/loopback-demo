@@ -6,7 +6,7 @@ export class CacheRequest extends Model {
     type: 'number',
     required: true,
   })
-  issueId: number;
+  issueNumber: number;
 
   @property({
     type: 'string',
@@ -19,7 +19,6 @@ export class CacheRequest extends Model {
     required: true,
   })
   repo: string;
-
 
   constructor(data?: Partial<CacheRequest>) {
     super(data);
