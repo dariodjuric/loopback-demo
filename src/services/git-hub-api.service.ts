@@ -3,7 +3,7 @@ import {getService} from '@loopback/service-proxy';
 import {GitHubApiDataSource} from '../datasources';
 
 export class GitHubIssueResponse {
-  issueNumber: number;
+  'number': number;
   title: string;
 }
 
