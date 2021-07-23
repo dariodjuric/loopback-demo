@@ -1,1 +1,1 @@
-export * from './github-api-data.source';
+export * from './git-hub-api.datasource';

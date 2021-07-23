@@ -4,18 +4,18 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'GitHubApi',
   connector: 'rest',
-  baseURL: 'https://api.github.com/',
   options: {
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
+      'User-Agent': 'LoopBack',
     },
   },
   operations: [
     {
       template: {
         method: 'GET',
-        url: 'repos/{repositoryOwner}/{repositoryName}/issues/{issueNumber}',
+        url: 'https://api.github.com/repos/{repositoryOwner}/{repositoryName}/issues/{issueNumber}',
       },
       functions: {
         getIssue: ['repositoryOwner', 'repositoryName', 'issueNumber'],
