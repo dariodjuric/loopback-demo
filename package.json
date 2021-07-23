@@ -34,6 +34,7 @@
     "prestart": "npm run rebuild",
     "start": "node -r source-map-support/register .",
     "start:watch": "tsc-watch --target es2017 --outDir ./dist --onSuccess \"node .\"",
+    "start:watch:debug": "cross-env DEBUG=loopback:connector:*,loopback:rest:* npm run start:watch",
     "clean": "lb-clean dist *.tsbuildinfo .eslintcache",
     "rebuild": "npm run clean && npm run build"
   },
@@ -64,6 +65,7 @@
     "@loopback/eslint-config": "^11.0.0",
     "@loopback/testlab": "^3.4.2",
     "@types/node": "^10.17.60",
+    "cross-env": "^7.0.3",
     "eslint": "^7.29.0",
     "source-map-support": "^0.5.19",
     "tsc-watch": "^4.4.0",
