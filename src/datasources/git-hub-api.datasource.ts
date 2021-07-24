@@ -8,7 +8,7 @@ const config = {
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
-      'User-Agent': 'LoopBack',
+      'User-Agent': 'LoopBack', // GitHub API requires User-Agent header
     },
   },
   operations: [
@@ -18,6 +18,7 @@ const config = {
         url: 'https://api.github.com/repos/{repositoryOwner}/{repositoryName}/issues/{issueNumber}',
       },
       functions: {
+        // The service that uses this datasource will need to have these functions in its interface
         getIssue: ['repositoryOwner', 'repositoryName', 'issueNumber'],
       },
     },

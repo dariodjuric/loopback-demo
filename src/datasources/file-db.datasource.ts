@@ -5,7 +5,7 @@ const config = {
   name: 'FileDb',
   connector: 'memory',
   localStorage: '',
-  file: './data/db.json'
+  file: './data/db.json', // Make sure the file exists!
 };
 
 // Observe application's life cycle to disconnect the datasource when
@@ -13,8 +13,10 @@ const config = {
 // gracefully. The `stop()` method is inherited from `juggler.DataSource`.
 // Learn more at https://loopback.io/doc/en/lb4/Life-cycle.html
 @lifeCycleObserver('datasource')
-export class FileDbDataSource extends juggler.DataSource
-  implements LifeCycleObserver {
+export class FileDbDataSource
+  extends juggler.DataSource
+  implements LifeCycleObserver
+{
   static dataSourceName = 'FileDb';
   static readonly defaultConfig = config;
 

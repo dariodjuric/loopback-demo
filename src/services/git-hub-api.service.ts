@@ -2,6 +2,9 @@ import {inject, Provider} from '@loopback/core';
 import {getService} from '@loopback/service-proxy';
 import {GitHubApiDataSource} from '../datasources';
 
+/**
+ * This class is used for representing the response from GitHub API. Only a subset of returned properties is used.
+ */
 export class GitHubIssueResponse {
   'number': number;
   title: string;
@@ -9,6 +12,9 @@ export class GitHubIssueResponse {
   state: string;
 }
 
+/**
+ * When other components want to use this service, they declare dependency on the following interface.
+ */
 export interface GitHubApi {
   getIssue(
     repositoryOwner: string,

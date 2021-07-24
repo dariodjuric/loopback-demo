@@ -1,5 +1,8 @@
 import {Model, model, property} from '@loopback/repository';
 
+/**
+ * This is a DTO used for our API.
+ */
 @model()
 export class CacheRequest extends Model {
   @property({

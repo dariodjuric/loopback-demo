@@ -1,5 +1,8 @@
 import {Entity, model, property} from '@loopback/repository';
 
+/**
+ * This model represents the issue that is persisted to local database.
+ */
 @model()
 export class Issue extends Entity {
   @property({
