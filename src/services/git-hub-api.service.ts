@@ -5,6 +5,8 @@ import {GitHubApiDataSource} from '../datasources';
 export class GitHubIssueResponse {
   'number': number;
   title: string;
+  user: {login: string};
+  state: string;
 }
 
 export interface GitHubApi {

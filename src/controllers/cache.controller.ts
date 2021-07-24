@@ -46,6 +46,8 @@ export class CacheController {
         const newIssueEntity = new Issue();
         newIssueEntity.issueNumber = issueResponse.number;
         newIssueEntity.title = issueResponse.title;
+        newIssueEntity.reporter = issueResponse.user?.login;
+        newIssueEntity.state = issueResponse.state;
 
         return this.issueRepository.create(newIssueEntity);
       } else {

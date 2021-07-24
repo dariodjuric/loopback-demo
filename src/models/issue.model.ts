@@ -16,6 +16,18 @@ export class Issue extends Entity {
   })
   title: string;
 
+  @property({
+    type: 'string',
+    required: true,
+  })
+  reporter: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  state: string;
+
   constructor(data?: Partial<Issue>) {
     super(data);
   }
