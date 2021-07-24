@@ -32,30 +32,25 @@ export class CacheController {
     })
     cacheRequest: CacheRequest,
   ): Promise<Issue> {
-    const issueResponse = await this.gitHubApiService.getIssue(
-      cacheRequest.owner,
-      cacheRequest.repo,
-      cacheRequest.issueNumber,
-    );
-
-    const newIssueEntity = new Issue();
-    newIssueEntity.issueNumber = issueResponse.number;
-    newIssueEntity.title = issueResponse.title;
-
     try {
-      await this.issueRepository.findById(issueResponse.number);
-
-      await this.issueRepository.replaceById(
-        issueResponse.number,
-        newIssueEntity,
-      );
-      return newIssueEntity;
+      // This method will return saved entity if exists, otherwise it will raise ENTITY_NOT_FOUND error
+      return await this.issueRepository.findById(cacheRequest.issueNumber);
     } catch (e) {
       if (e.code === 'ENTITY_NOT_FOUND') {
+        const issueResponse = await this.gitHubApiService.getIssue(
+          cacheRequest.owner,
+          cacheRequest.repo,
+          cacheRequest.issueNumber,
+        );
+
+        const newIssueEntity = new Issue();
+        newIssueEntity.issueNumber = issueResponse.number;
+        newIssueEntity.title = issueResponse.title;
+
         return this.issueRepository.create(newIssueEntity);
       } else {
         throw new HttpErrors.InternalServerError(
-          `Error while looking up issue #${issueResponse.number} in the database`,
+          `Error while looking up issue #${cacheRequest.issueNumber} in the database`,
         );
       }
     }
