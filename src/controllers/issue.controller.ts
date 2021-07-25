@@ -1,11 +1,11 @@
-import {getModelSchemaRef, HttpErrors, post, requestBody} from '@loopback/rest';
-import {CacheRequest, Issue} from '../models';
+import {get, getModelSchemaRef, HttpErrors, param} from '@loopback/rest';
+import {CachedIssue} from '../models';
 import {inject} from '@loopback/core';
 import {GitHubApi} from '../services';
 import {repository} from '@loopback/repository';
 import {IssueRepository} from '../repositories';
 
-export class CacheController {
+export class IssueController {
   constructor(
     @inject('services.GitHubApi')
     protected gitHubApiService: GitHubApi,
@@ -13,46 +13,45 @@ export class CacheController {
     public issueRepository: IssueRepository,
   ) {}
 
-  @post('/cache-requests', {
+  @get('/issues/{repositoryOwner}/{repositoryName}/{issueNumber}', {
     responses: {
       '200': {
         content: {
-          'application/json': {schema: getModelSchemaRef(Issue)},
+          'application/json': {
+            schema: getModelSchemaRef(CachedIssue),
+          },
         },
       },
     },
   })
-  async createCacheEntry(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(CacheRequest),
-        },
-      },
-    })
-    cacheRequest: CacheRequest,
-  ): Promise<Issue> {
+  async getIssue(
+    @param.path.string('repositoryOwner') repositoryOwner: string,
+    @param.path.string('repositoryName') repositoryName: string,
+    @param.path.number('issueNumber') issueNumber: number,
+  ): Promise<CachedIssue> {
     try {
       // This method will return saved entity if exists, otherwise it will raise ENTITY_NOT_FOUND error
-      return await this.issueRepository.findById(cacheRequest.issueNumber);
+      return await this.issueRepository.findById(issueNumber);
     } catch (e) {
       if (e.code === 'ENTITY_NOT_FOUND') {
         const issueResponse = await this.gitHubApiService.getIssue(
-          cacheRequest.owner,
-          cacheRequest.repo,
-          cacheRequest.issueNumber,
+          repositoryOwner,
+          repositoryName,
+          issueNumber,
         );
 
-        const newIssueEntity = new Issue();
+        const newIssueEntity = new CachedIssue();
         newIssueEntity.issueNumber = issueResponse.number;
         newIssueEntity.title = issueResponse.title;
         newIssueEntity.reporter = issueResponse.user?.login;
         newIssueEntity.state = issueResponse.state;
+        newIssueEntity.repositoryName = repositoryName;
+        newIssueEntity.repositoryOwner = repositoryOwner;
 
         return this.issueRepository.create(newIssueEntity);
       } else {
         throw new HttpErrors.InternalServerError(
-          `Error while looking up issue #${cacheRequest.issueNumber} in the database`,
+          `Error while looking up issue #${issueNumber} in the database`,
         );
       }
     }

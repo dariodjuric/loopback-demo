@@ -1,2 +1,2 @@
 export * from './ping.controller';
-export * from './cache.controller';
+export * from './issue.controller';

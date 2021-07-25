@@ -4,7 +4,7 @@ import {Entity, model, property} from '@loopback/repository';
  * This model represents the issue that is persisted to local database.
  */
 @model()
-export class Issue extends Entity {
+export class CachedIssue extends Entity {
   @property({
     type: 'number',
     id: true,
@@ -12,6 +12,18 @@ export class Issue extends Entity {
     required: true,
   })
   issueNumber: number;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  repositoryOwner: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  repositoryName: string;
 
   @property({
     type: 'string',
@@ -31,13 +43,13 @@ export class Issue extends Entity {
   })
   state: string;
 
-  constructor(data?: Partial<Issue>) {
+  constructor(data?: Partial<CachedIssue>) {
     super(data);
   }
 }
 
-export interface IssueRelations {
+export interface CachedIssueRelations {
   // describe navigational properties here
 }
 
-export type IssueWithRelations = Issue & IssueRelations;
+export type IssueWithRelations = CachedIssue & CachedIssueRelations;

@@ -1,16 +1,14 @@
 import {inject} from '@loopback/core';
 import {DefaultCrudRepository} from '@loopback/repository';
 import {FileDbDataSource} from '../datasources';
-import {Issue, IssueRelations} from '../models';
+import {CachedIssue, CachedIssueRelations} from '../models';
 
 export class IssueRepository extends DefaultCrudRepository<
-  Issue,
-  typeof Issue.prototype.issueNumber,
-  IssueRelations
+  CachedIssue,
+  typeof CachedIssue.prototype.issueNumber,
+  CachedIssueRelations
 > {
-  constructor(
-    @inject('datasources.FileDb') dataSource: FileDbDataSource,
-  ) {
-    super(Issue, dataSource);
+  constructor(@inject('datasources.FileDb') dataSource: FileDbDataSource) {
+    super(CachedIssue, dataSource);
   }
 }
